@@ -1,0 +1,248 @@
+@charset "utf-8";
+
+html {
+  font: 15px/1.6 YuGothic,"游ゴシック","Hiragino Kaku Gothic Pro","ヒラギノ角ゴ Pro W3","メイリオ","Meiryo","ＭＳ Ｐゴシック",Osaka,sans-serif;
+}
+
+body {
+  width: 20em;
+  margin: 0;
+  font-size: inherit;
+}
+
+label {
+  display: inline-block;
+  padding: 0 .75rem;
+  margin-bottom: -4px;
+  font-weight: bold;
+  font-size: .95em;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+input {
+  box-sizing: border-box;
+  outline: none;
+  font-size: inherit;
+  padding: .5rem .75rem;
+  border-radius: 2px;
+}
+
+input[type=text] {
+  width: 100%;
+  transition: .16s linear;
+  border: 1px solid #888;
+}
+
+input[type=text]:focus {
+  border-color: #e8004d;
+}
+
+ul {
+  list-style: none;
+  padding: 0 1rem;
+  margin: 0;
+}
+
+a[role=button] {
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.dialog__box {
+  transition: .16s linear;
+  top: .5rem;
+  opacity: 1;
+  position: absolute;
+  left: 1rem;
+  width: calc(100% - 2rem);
+  margin: 0 auto;
+  background: #e8004d;
+  text-align: center;
+  color: #fff;
+}
+
+.dialog-enter {
+  top: 0rem;
+  opacity: 0;
+}
+
+.dialog-leave {
+  top: 1rem;
+  opacity: 0;
+}
+
+.dialog__msg {
+  display: inline-block;
+  padding: .75rem 0;
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+.dialog__btns {
+  display: flex;
+  border-top: 1px solid #c10040;
+}
+
+.dialog__btn {
+  flex-basis: 50%;
+  transition: .16s ease-in-out;
+}
+
+.dialog__no-btn {
+  border-right: 1px solid #c10040;
+}
+
+.dialog__btn:hover {
+  background: #ff246d;
+}
+
+.dialog__btn:active {
+  background: #ff4b87;
+}
+
+.form__box {
+  box-sizing: border-box;
+  padding: 1rem;
+  margin: 0 auto;
+}
+
+.form__group {
+  margin-top: 1rem;
+}
+
+.form__input-group {
+  display: flex;
+}
+
+.form__input-group-item.form__input-text {
+  margin-right: 1rem;
+}
+
+.form__input-group-item.form__btn {
+  flex-basis: 5em;
+}
+
+.form__btn {
+  transition: .16s linear;
+  background: #e8004d;
+  width: auto;
+  color: #fff;
+  border: 1px solid transparent;
+}
+
+.form__btn:hover {
+  background: #ff246d;
+}
+
+.form__btn:active {
+  background: #ff4b87;
+}
+
+.list__box {
+  position: relative;
+  margin-top: 1rem;
+}
+
+.list__btn {
+  transition: .16s linear;
+  background: #e8004d;
+  width: 100%;
+  display: block;
+  padding: .5rem 0;
+  text-align: center;
+  color: #fff;
+}
+
+.list__btn:hover {
+  background: #ff246d;
+}
+
+.list__btn:active {
+  background: #ff4b87;
+}
+
+.list__aliases {
+  overflow: auto;
+  transition: .16s linear;
+  background: transparent;
+  height: 10em;
+  opacity: 1;
+}
+
+.list__aliases.list-enter,
+.list__aliases.list-leave {
+  height: 0;
+  opacity: 0;
+}
+
+.list__alias {
+  transition: .16s linear;
+  opacity: 1;
+  height: 44px;
+
+  position: relative;
+  overflow: hidden;
+  padding: .5rem 1rem;
+}
+
+.list-enter {
+  height: 0;
+  opacity: 0;
+}
+
+.list-leave {
+  height: 0;
+  opacity: 0;
+}
+
+.list__alias:hover {
+  background: hsla(340.1, 100%, 45.5%, .1);
+}
+
+.list__alias:hover .list__alias-name {
+  color: #e8004d;
+}
+
+.list__alias:hover .list__delete-btn:before,
+.list__alias:hover .list__delete-btn:after {
+  box-shadow: inset 0 0 0 32px #e8004d;
+}
+
+.list__alias-name {
+  display: block;
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+.list__alias-url {
+  display: block;
+  padding-left: 1rem;
+  text-align: right;
+  font-size: .75em;
+  color: hsla(0, 0%, 0%, .6);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: pre;
+}
+
+.list__delete-btn {
+  position: absolute;
+  right: 0;
+  top: .8rem;
+  display: inline-block;
+  transform-origin: right top;
+  transform: scale(.6) rotate(45deg);
+  color: hsla(0, 0%, 0%, .6);
+  color: hsla(0, 0%, 0%, .6);
+}
+
+.list__not-found {
+  margin-top: 1.7rem;
+  text-align: center;
+  font-size: 1.7em;
+  font-weight: bold;
+  line-height: 2;
+  color: #e8004d;
+}

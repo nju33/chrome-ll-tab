@@ -1,0 +1,14 @@
+{
+  "presets": [
+    "es2015",
+    "react"
+  ],
+  "plugins": [
+    "transform-async-to-generator",
+    "transform-es2015-parameters",
+    "transform-function-bind",
+    "transform-object-assign",
+    "transform-object-rest-spread",
+    "transform-runtime"
+  ]
+}
