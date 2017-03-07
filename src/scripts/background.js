@@ -37,13 +37,13 @@ function searchTabs(text) {
           const bools = [];
           if ('_' in parsed) {
             bools.push(parsed._.some(text => {
-              return new RegExp(escapeRegExp(text)).test(tab.title);
+              return new RegExp(escapeRegExp(text), 'i').test(tab.title);
             }));
           }
 
           if ('title' in parsed) {
             bools.push(parsed.title.some(text => {
-              return new RegExp(escapeRegExp(text)).test(tab.title);
+              return new RegExp(escapeRegExp(text), 'i').test(tab.title);
             }));
           }
 
@@ -89,7 +89,3 @@ chrome.omnibox.onInputEntered.addListener(text => {
     chrome.tabs.update(tabs[0].id, {active: true});
   });
 });
-//
-// chrome.omnibox.onInputCancelled.addListener(() => {
-//   fuse = null;
-// });
