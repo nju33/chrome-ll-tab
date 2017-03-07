@@ -1,8 +1,8 @@
 {
   "appName": {
-    "message": "ll"
+    "message": "lltab"
   },
   "appDesc": {
-    "message": "It is an extension that can alias a certain page. You will be able to access the page with that name with a simple operation."
+    "message": "Search the tab title and URL from the address bar and focus on the target tab"
   }
 }

@@ -2,24 +2,23 @@
   "manifest_version": 2,
   "name": "__MSG_appName__",
   "description": "__MSG_appDesc__",
-  "version": "2.0.2",
+  "version": "1.0.0",
   "default_locale": "en",
   "omnibox": {
-    "keyword": "ll"
+    "keyword": "tab"
   },
   "permissions": [
-    "storage",
     "tabs"
   ],
   "icons": {
-    "16": "icons/icon16.png",
-    "48": "icons/icon48.png",
-    "128": "icons/icon128.png"
+    "16": "icons/icon_16x16.png",
+    "48": "icons/icon_48x48.png",
+    "128": "icons/icon_128x128.png"
   },
   "browser_action": {
     "default_icon": {
-      "19": "icons/icon19.png",
-      "38": "icons/icon38.png"
+      "19": "icons/icon_19x19.png",
+      "38": "icons/icon_38x38.png"
     },
     "default_title": "ll",
     "default_popup": "popup/index.html"

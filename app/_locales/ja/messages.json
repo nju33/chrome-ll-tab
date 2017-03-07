@@ -1,8 +1,8 @@
 {
   "appName": {
-    "message": "ll"
+    "message": "lltab"
   },
   "appDesc": {
-    "message": "とあるページに別名を付けることができる拡張です。簡単な操作でその名前でページにアクセスできるようになります。"
+    "message": "Search the tab title and URL from the address bar and focus on the target tab"
   }
 }

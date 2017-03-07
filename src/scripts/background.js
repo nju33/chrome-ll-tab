@@ -3,68 +3,93 @@ import esc from 'lodash.escape';
 import escRE from 'lodash.escaperegexp';
 import unesc from 'lodash.unescape';
 import Fuse from 'fuse.js';
+import Fisea from 'fisea';
+import flatten from 'lodash/flatten';
+import escapeRegExp from 'lodash/escapeRegExp';
 
-// const sample = [
-//   {
-//     url: esc('https://www.youtube.com/?hl=ja&gl=JP'),
-//     alias: 'yt',
-//     lastEnter: 0,
-//   },
-//   {
-//     url: esc('https://github.com/totora0155'),
-//     alias: 'gh',
-//     lastEnter: 0,
-//   },
-//   {
-//     url: 'http://www.netflix.com/browse',
-//     alias: 'nf',
-//     lastEnter: 0,
-//   },
-// ]
-//
+const fisea = new Fisea(['title', 'url']);
 
-let aliases = null;
-let fuse = null;
+function getWindow() {
+  return new Promise(resolve => {
+    chrome.windows.getCurrent(win => {
+      return resolve(win);
+    });
+  });
+}
 
-chrome.omnibox.onInputStarted.addListener(() => {
-  storage.get().then(_aliases => {
-    aliases = _aliases || [];
-    fuse = new Fuse(aliases, {keys: ['alias']})
-  })
-});
+function getTabs(win) {
+  return new Promise(resolve => {
+    chrome.tabs.query({windowId: win.id}, tabs => resolve(tabs));
+  });
+}
+
+function getTabsInCurrentWindow() {
+  return getWindow().then(win => getTabs(win));
+}
+
+function searchTabs(text) {
+  const parsed = fisea.parse(text);
+
+  return new Promise(resolve => {
+    getTabsInCurrentWindow()
+      .then(tabs => {
+        const matches = tabs.filter(tab => {
+          const bools = [];
+          if ('_' in parsed) {
+            bools.push(parsed._.some(text => {
+              return new RegExp(escapeRegExp(text)).test(tab.title);
+            }));
+          }
+
+          if ('title' in parsed) {
+            bools.push(parsed.title.some(text => {
+              return new RegExp(escapeRegExp(text)).test(tab.title);
+            }));
+          }
+
+          if ('url' in parsed) {
+            bools.push(parsed.title.some(text => {
+              return new RegExp(escapeRegExp(text)).test(tab.url);
+            }));
+          }
+
+          return bools.every(b => b);
+        });
+        
+        resolve(matches);
+      });
+  });
+}
 
 chrome.omnibox.onInputChanged.addListener((text, suggest) => {
-  if (fuse === null) {
+  if (!text) {
     return suggest([]);
   }
 
-  const matches = fuse.search(text)
-  const suggestions = matches.map(item => {
-    return {
-      content: item.url,
-      description: `@${item.alias} (${item.url})`,
-    };
+  searchTabs(text).then(tabs => {
+    if (tabs.length === 0) {
+      return suggest([]);
+    }
+
+    suggest(tabs.map(tab => {
+      return {
+        content: tab.url,
+        description: tab.title
+      };
+    }));
   });
-  suggest(suggestions);
 });
 
 chrome.omnibox.onInputEntered.addListener(text => {
-  storage.get().then(_aliases => {
-    const aliases = _aliases || [];
-    const fuse = new Fuse(aliases, {keys: ['alias']});
-    const matches = fuse.search(text);
-    const target = matches[0];
-
-    if (!target) {
+  searchTabs(text).then(tabs => {
+    if (tabs.length === 0) {
       return;
     }
 
-    chrome.tabs.update({url: target.url});
-    target.lastEnter = Date.now();
-    storage.set(aliases);
-  })
+    chrome.tabs.update(tabs[0].id, {active: true});
+  });
 });
-
-chrome.omnibox.onInputCancelled.addListener(() => {
-  fuse = null;
-});
+//
+// chrome.omnibox.onInputCancelled.addListener(() => {
+//   fuse = null;
+// });
