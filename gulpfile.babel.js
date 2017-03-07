@@ -18,25 +18,9 @@ gulp.task('script:background', (() => {
   }
 })());
 
-gulp.task('script:popup', (() => {
-  const src = 'src/scripts/popup.js';
-  const dest = 'app/popup/scripts/';
-
-  return () => {
-    gulp.src(src)
-      .pipe(gulpPlumber())
-      .pipe(webpack(Object.assign(webpackConfig, {
-        output: {
-          filename: 'popup.js',
-        },
-      })))
-      .pipe(gulp.dest(dest));
-  }
-})());
-
 {
   const src = 'src/**/*.js';
-  const tasks = ["script:background", "script:popup"];
+  const tasks = ["script:background"];
 
   gulp.task('scripts', tasks, () => {
     gulp.watch(src, tasks);
