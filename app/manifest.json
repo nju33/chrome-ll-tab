@@ -15,17 +15,8 @@
     "48": "icons/icon_48x48.png",
     "128": "icons/icon_128x128.png"
   },
-  "browser_action": {
-    "default_icon": {
-      "19": "icons/icon_19x19.png",
-      "38": "icons/icon_38x38.png"
-    },
-    "default_title": "ll",
-    "default_popup": "popup/index.html"
-  },
   "background": {
     "persistent": false,
     "scripts": ["scripts/background.js"]
-  },
-  "content_security_policy":"script-src 'self' 'unsafe-eval'; object-src 'self'"
+  }
 }
