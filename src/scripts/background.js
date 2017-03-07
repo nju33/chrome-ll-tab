@@ -48,14 +48,14 @@ function searchTabs(text) {
           }
 
           if ('url' in parsed) {
-            bools.push(parsed.title.some(text => {
+            bools.push(parsed.url.some(text => {
               return new RegExp(escapeRegExp(text)).test(tab.url);
             }));
           }
 
           return bools.every(b => b);
         });
-        
+
         resolve(matches);
       });
   });
