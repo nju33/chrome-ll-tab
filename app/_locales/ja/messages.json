@@ -3,6 +3,6 @@
     "message": "ll Tab"
   },
   "appDesc": {
-    "message": "Search the tab title and URL from the address bar and focus on the target tab"
+    "message": "アドレスバーからタイトルかURLで開かれているタブを検索して、対象をアクティブなタブにします"
   }
 }
