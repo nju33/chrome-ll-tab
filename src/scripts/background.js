@@ -1,6 +1,12 @@
+import Fuse from 'fuse.js';
 import Fisea from 'fisea';
 import flatten from 'lodash/flatten';
 import escapeRegExp from 'lodash/escapeRegExp';
+import union from 'lodash/union';
+import compact from 'lodash/compact';
+import intersectionWith from 'lodash/intersectionWith';
+import isEqual from 'lodash/isEqual';
+import get from 'lodash/get';
 
 const fisea = new Fisea(['title', 'url']);
 
@@ -28,30 +34,41 @@ function searchTabs(text) {
   return new Promise(resolve => {
     getTabsInCurrentWindow()
       .then(tabs => {
-        const matches = tabs.filter(tab => {
-          const bools = [];
-          if ('_' in parsed) {
-            bools.push(parsed._.some(text => {
-              return new RegExp(escapeRegExp(text), 'i').test(tab.title);
-            }));
-          }
-
-          if ('title' in parsed) {
-            bools.push(parsed.title.some(text => {
-              return new RegExp(escapeRegExp(text), 'i').test(tab.title);
-            }));
-          }
-
-          if ('url' in parsed) {
-            bools.push(parsed.url.some(text => {
-              return new RegExp(escapeRegExp(text)).test(tab.url);
-            }));
-          }
-
-          return bools.every(b => b);
+        const fuseForTitle = new Fuse(tabs, {
+          keys: ['title'],
+          caseSensitive: true
         });
+        const fuseForURL = new Fuse(tabs, {keys: ['url']});
 
-        resolve(matches);
+        const titleQueries = union(
+          get(parsed, '_', []), get(parsed, 'title', [])
+        );
+
+        const titleMatches = compact(titleQueries)
+          .reduce((result, query) => {
+            const matches = fuseForTitle.search(query);
+            result = result.concat(matches);
+            return result;
+          }, []);
+
+        const urlMatches = compact(get(parsed, 'url', []))
+          .reduce((result, query) => {
+            const matches = fuseForURL.search(query);
+            result = result.concat(matches);
+            return result;
+          }, []);
+
+        let targetTabs = [];
+
+        if (titleMatches.length > 0 && urlMatches.length > 0) {
+          targetTabs = intersectionWith(titleMatches, urlMatches, isEqual);
+        } else if (titleMatches.length > 0 && urlMatches.length === 0) {
+          targetTabs = titleMatches;
+        } else if (titleMatches.length === 0 && urlMatches.length > 0) {
+          targetTabs = urlMatches;
+        }
+
+        resolve(targetTabs);
       });
   });
 }
@@ -68,7 +85,7 @@ chrome.omnibox.onInputChanged.addListener((text, suggest) => {
 
     suggest(tabs.map(tab => {
       return {
-        content: tab.url,
+        content: tab.title,
         description: tab.title
       };
     }));
